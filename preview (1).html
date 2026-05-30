@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Phantom Invitation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+overflow:hidden;
+height:100vh;
+font-family:Georgia,serif;
+background:radial-gradient(circle at center,#1e3a5f 0%,#07111f 55%,#02060d 100%);
+color:#fff;
+}
+#moon{
+position:absolute;right:10%;top:8%;
+width:180px;height:180px;border-radius:50%;
+background:radial-gradient(circle,#fff,#dbeafe 70%,#cbd5e1);
+box-shadow:0 0 60px rgba(255,255,255,.7);
+}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 3s infinite}
+@keyframes twinkle{50%{opacity:.2}}
+.center{
+position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;
+}
+.envelope{
+width:320px;height:210px;position:relative;cursor:pointer;
+animation:float 4s ease-in-out infinite;
+}
+@keyframes float{50%{transform:translateY(-14px)}}
+.env-base{
+position:absolute;bottom:0;width:100%;height:100%;
+background:#f8fafc;border-radius:8px;
+}
+.env-top{
+position:absolute;top:0;left:0;
+width:0;height:0;
+border-left:160px solid transparent;
+border-right:160px solid transparent;
+border-top:110px solid #e2e8f0;
+transform-origin:top;
+transition:1.2s;
+z-index:5;
+}
+.note{
+margin-top:25px;letter-spacing:3px;text-transform:uppercase;font-size:.9rem;opacity:.85
+}
+.letter{
+position:absolute;
+left:50%;top:55%;
+transform:translate(-50%,-50%) scale(.85);
+width:min(800px,90vw);
+height:min(78vh,760px);
+background:linear-gradient(#fff,#f8fafc);
+color:#111827;
+padding:40px;
+border-radius:18px;
+box-shadow:0 20px 80px rgba(0,0,0,.45);
+opacity:0;
+pointer-events:none;
+overflow:auto;
+transition:1.2s;
+}
+.letter.show{
+opacity:1;
+pointer-events:auto;
+transform:translate(-50%,-50%) scale(1);
+}
+.title{text-align:center;margin-bottom:25px}
+.title h1{letter-spacing:4px}
+.content{white-space:pre-line;line-height:1.9;font-size:1.08rem}
+.signature{text-align:right;margin-top:25px;font-style:italic}
+.badge{
+display:inline-block;
+padding:8px 14px;
+border:1px solid #cbd5e1;
+border-radius:999px;
+margin-bottom:15px;
+}
+.rsvp{
+margin-top:20px;text-align:center;
+}
+.rsvp button{
+padding:12px 22px;border:none;border-radius:999px;
+background:#0f172a;color:white;cursor:pointer;
+}
+.fadeOut{opacity:0;transition:1s}
+</style>
+</head>
+<body>
+
+<audio id="bgm" loop>
+  <source src="audio_tach_tu_video-1.mp3" type="audio/mpeg">
+</audio>
+
+<div id="moon"></div>
+
+<script>
+for(let i=0;i<80;i++){
+ const s=document.createElement('div');
+ s.className='star';
+ s.style.width=s.style.height=(Math.random()*3+1)+'px';
+ s.style.left=Math.random()*100+'vw';
+ s.style.top=Math.random()*100+'vh';
+ s.style.animationDelay=Math.random()*3+'s';
+ document.body.appendChild(s);
+}
+</script>
+
+<div class="center" id="intro">
+  <div class="envelope" onclick="openLetter()">
+      <div class="env-top" id="flap"></div>
+      <div class="env-base"></div>
+  </div>
+  <div class="note">A secret notice has arrived ♠</div>
+</div>
+
+<div class="letter" id="letter">
+<div class="title">
+<div class="badge">PHANTOM THIEF 1412</div>
+<h1>THƯ MỜI BÍ MẬT</h1>
+</div>
+
+<div class="content" id="content"></div>
+
+<div class="signature">
+Phantom Thief 1412<br>
+Kaito Kid ♠
+</div>
+
+<div class="rsvp">
+<button onclick="alert('Hẹn gặp dưới ánh trăng nhé! ✨')">Tôi sẽ tham dự</button>
+</div>
+</div>
+
+<script>
+const text=`
+Kính gửi vị khách đặc biệt,
+
+Dưới ánh trăng của ngày 21/06/2026,
+
+Ta xin thông báo rằng một kho báu vô cùng quý giá sắp xuất hiện.
+
+Mục tiêu lần này:
+
+🎂 SINH NHẬT CỦA Lê Minh Huy
+
+⏰ Thời gian: 17:00
+📍 Địa điểm: Nơi những ký ức quen thuộc đang chờ chúng ta quay lại
+
+Khác với những viên kim cương lấp lánh,
+thứ ta muốn đánh cắp lần này là những nỗi buồn,
+những áp lực và những ngày mệt mỏi.
+
+Đổi lại sẽ là tiếng cười,
+những lời chúc,
+và những kỷ niệm đáng nhớ.
+
+Sự hiện diện của ngươi chính là mảnh ghép cuối cùng
+để phi vụ này trở nên hoàn hảo.
+
+Hẹn gặp dưới ánh trăng.
+`;
+
+function openLetter(){
+ const bgm=document.getElementById('bgm');
+ if(bgm){ bgm.play().catch(()=>{}); }
+
+ document.getElementById('flap').style.transform='rotateX(180deg)';
+ document.getElementById('intro').classList.add('fadeOut');
+
+ setTimeout(()=>{
+   document.getElementById('letter').classList.add('show');
+   type();
+ },900);
+}
+
+let i=0;
+function type(){
+ if(i<text.length){
+   document.getElementById('content').innerHTML+=text.charAt(i);
+   i++;
+   setTimeout(type,22);
+ }
+}
+</script>
+</body>
+</html>
